@@ -1,0 +1,2 @@
+# PwZN
+laby z pythona
