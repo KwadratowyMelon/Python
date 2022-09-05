@@ -1,2 +1,3 @@
 # PwZN
-laby z pythona
+various python programs
+mainly mathematincs and physics
