@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<head><title>Plansza 4</title></head>
+<body>
+<h1>Plansza1</h1>
+<p style="font-size:160%;"> Liczba kwadratów dodanych:
+<span style="font-size:120%;" id="licznikKwadratow"></span>
+</p>
+
+<p style="font-size:160%;"> Liczba kwadratów usunietych:
+<span style="font-size:120%;" id="licznikUsunietych"></span>
+</p>
+<canvas id="mapa" width="400" height="400" />
+
+<script>
+document.getElementById("licznikKwadratow").innerHTML = 0;
+document.getElementById("licznikUsunietych").innerHTML = 0;
+var cName = "mapa"; // nasze ID
+var tileWidth = 40; // szerokosc tytulu
+var canvas = document.getElementById(cName); // zwraca element o okreslonym ID
+var ctx = canvas.getContext("2d"); // tworzy obiekt CanvasRenderingContext2D (en-US) reprezentujący dwuwymiarowy kontekst renderowania
+var height = document.getElementById(cName).clientHeight; // zmienna wysokosc, ,przekazanie wartosci przez ID
+var width = document.getElementById(cName).clientWidth; // zmienna szerokosc,przekazanie wartosci przez ID
+var counterOfSquares=0; // zmienna zliczajaca dodanie
+var counterOfBlanckSquares=0; // zmienna zliczajaca usuwanie
+
+//Initialize naszej tablicy
+var grid = new Array(height/tileWidth);
+for (var row = 0; row < height/tileWidth; row++) {
+  grid[row] = new Array(width/tileWidth);
+  for (var column = 0; column < width/tileWidth; column++)
+  {
+    grid[row][column] = 0;
+    drawSquare(row,column);
+  }
+}
+
+defaultSettings(); // wywolanie funkcji ustawiajacej domyslne kwadraty
+
+
+//Click event
+canvas.addEventListener("click", handleClick, false);
+
+function handleClick(e){
+
+  var x = Math.floor(e.offsetX/tileWidth);
+  var y = Math.floor(e.offsetY/tileWidth);
+  grid[x][y] = (grid[x][y]+1)%2;
+drawSquare(x,y);
+
+	if(grid[x][y] ==1)
+      counterOfSquares++;
+	document.getElementById("licznikKwadratow").innerHTML = counterOfSquares;
+	if(grid[x][y] ==0)
+      counterOfBlanckSquares++;
+	document.getElementById("licznikUsunietych").innerHTML = counterOfBlanckSquares;
+	checkSymetry();
+}
+
+function checkSymetry() {
+  var symetry=0;
+  for (var row=0;row<10;row++)
+  {
+     for (var column=0;column<10;column++)
+	 {
+	 if (grid[row][column]!=grid [9-row][column])
+		symetry++;
+  }
+  }
+   for (var row=0;row<10;row++)
+  {
+     for (var column=0;column<10;column++)
+	 {
+	 if (grid[row][column]!=grid [row][9-column])
+		symetry++;
+  }
+}
+  if (symetry==0)
+	alert("Osiągnąłeś symetrie!");
+}
+
+function defaultSettings(){
+  column=2;
+  for (var row=3;row<7;row++)
+  {
+	grid[row][column] = 1;
+    drawSquare(row,column);
+  }
+  column=7;
+  for (var row=3;row<7;row++)
+  {
+	grid[row][column] = 1;
+    drawSquare(row,column);
+  }
+
+
+  row=7;
+    for (var column=1;column<4;column++)
+  {
+	grid[row][column] = 1;
+    drawSquare(row,column);
+  }
+
+}
+
+function drawSquare(x, y){
+  if (grid[x][y] == 0)
+    ctx.fillStyle="#008080";
+  else
+    ctx.fillStyle="#444444";
+  ctx.fillRect(x*tileWidth,y*tileWidth,tileWidth-1,tileWidth-1);
+}
+
+
+
+</script>
+</body>
+</html>
